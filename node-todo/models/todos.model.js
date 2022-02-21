@@ -45,8 +45,19 @@ const createTodo = async (text, priority, done) => {
 }
 
 const updateTodo = async (id, todo) => {
-    //map + ellenőrzés a colback elején
-    //object spreading
+    console.log(typeof todo.text);
+    if (!isUpdateValid(todo)) {
+        throw "this value is incorrect or not allowed to be set"
+    }
+    const allTodos = await loadTodos();
+    const nextItem = allTodos.map((item) => {
+        if (item.id !== id) {
+            return item;
+        } else {
+            return {...item, ...todo} //object spreading
+        }
+    })
+    await saveTodos(nextItem);
     //save to json
 }
 
@@ -78,4 +89,13 @@ const assembleTodo = (text, priority, done) => {
         todo.done = false;
     }
     return todo;
+}
+
+const isUpdateValid = (todo) => {
+    let isValid = true;
+    if (todo.id) isValid = false;
+    if (typeof todo.text !== 'string') isValid = false;
+    if (todo.priority < 1 || todo.priority > 5) isValid = false;
+    if (typeof todo.done !== "boolean") isValid = false;
+    return isValid;
 }

@@ -30,9 +30,15 @@
     "done": false
   },
   {
-    "id": "1b266cbc-f8e4-4d07-abce-206dbda18875",
-    "text": "fun stuff",
-    "priority": 5,
+    "id": "false",
+    "text": "VERY DIFFERENT TEXT THAN BEFORE",
+    "priority": 1,
     "done": false
+  },
+  {
+    "id": "c69e1ac0-5d50-4aec-9189-8d07abab5b2b",
+    "text": "New fun text",
+    "priority": 5,
+    "done": true
   }
 ]

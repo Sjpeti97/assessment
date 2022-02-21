@@ -2,7 +2,9 @@ const {Router} = require('express');
 
 const {
     loadTodos,
-    createTodo, findTodo
+    createTodo,
+    findTodo,
+    updateTodo
 } = require("../models/todos.model");
 
 const todosApi = Router();
@@ -30,12 +32,17 @@ todosApi.post('/', async (req, res) => {
         const newTodo = await createTodo(req.body.text, req.body.priority, req.body.done);
         res.json(newTodo);
     } catch (err) {
-        res.json({message: err})
+        res.json({message: err});
     }
 })
 
 todosApi.put('/:id', (req, res) => {
-
+    try {
+        const updatedTodos = updateTodo(req.params.id, req.body);
+        res.json(updatedTodos);
+    } catch (err) {
+        res.json({message: err});
+    }
 })
 
 todosApi.delete('/:id', (req, res) => {
