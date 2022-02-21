@@ -1,5 +1,3 @@
-//todo file kezelés
-
 // functions load, add find, update
 
 const fs = require('fs/promises');
