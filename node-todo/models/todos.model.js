@@ -27,7 +27,9 @@ const loadTodos = async () => {
 }
 
 const findTodo = async (id) => {
-
+    checkFilePath();
+    const allTodos = await loadTodos();
+    return allTodos.find((item) => item.id === id);
 }
 
 const deleteTodo = (id) => {

@@ -2,13 +2,18 @@ const {Router} = require('express');
 
 const {
     loadTodos,
-    createTodo
+    createTodo, findTodo
 } = require("../models/todos.model");
 
 const todosApi = Router();
 
 todosApi.use('/:id', async (req, res, next) => {
-
+    const todo = await findTodo(req.params.id);
+    if (todo) {
+        req.todo = todo;
+        return next();
+    }
+    res.status(404).end();
 })
 
 todosApi.get('/', async (req, res) => {
@@ -17,7 +22,7 @@ todosApi.get('/', async (req, res) => {
 })
 
 todosApi.get('/:id', (req, res) => {
-
+    res.json(req.todo);
 })
 
 todosApi.post('/', async (req, res) => {
