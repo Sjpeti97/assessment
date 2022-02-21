@@ -22,11 +22,5 @@
     "text": "POST test text",
     "priority": 5,
     "done": false
-  },
-  {
-    "id": "aa378759-c5d8-4bb4-b322-65e2a75427d5",
-    "text": "important stuff",
-    "priority": 5,
-    "done": false
   }
 ]
