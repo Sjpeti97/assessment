@@ -1,6 +1,7 @@
 // functions load, add find, update
 
 const fs = require('fs/promises');
+const {v4: uuidv4} = require("uuid");
 
 let filePath = '';
 
@@ -15,7 +16,8 @@ const checkFilePath = () => {
 }
 
 const saveTodos = (todos) => {
-
+    const raw = JSON.stringify(todos, null, 2);
+    return fs.writeFile(filePath, raw);
 }
 
 const loadTodos = async () => {
@@ -33,8 +35,11 @@ const deleteTodo = (id) => {
     //save to json
 }
 
-const createTodo = (todo) => {
-    //save to json
+const createTodo = async (text, priority, done) => {
+    const todo = assembleTodo(text, priority, done);
+    let allTodos = await loadTodos();
+    allTodos.push(todo);
+    await saveTodos(allTodos);
 }
 
 const updateTodo = async (id, todo) => {
@@ -45,7 +50,6 @@ const updateTodo = async (id, todo) => {
 
 module.exports = {
     setFilePath,
-    saveTodos,
     loadTodos,
     findTodo,
     deleteTodo,
@@ -53,4 +57,23 @@ module.exports = {
     updateTodo
 }
 
+const assembleTodo = (text, priority, done) => {
+    let todo = {};
+    const defaultPriority = 3;
 
+    todo.id = uuidv4();
+    todo.text = text;
+
+    if (priority<=5 && priority>=1) {
+        todo.priority = priority;
+    } else {
+        todo.priority = defaultPriority;
+    }
+
+    if (done) {
+        todo.done = done;
+    } else {
+        todo.done = false;
+    }
+    return todo;
+}
