@@ -1,5 +1,3 @@
-// functions load, add find, update
-
 const fs = require('fs/promises');
 const {v4: uuidv4} = require("uuid");
 
@@ -32,9 +30,10 @@ const findTodo = async (id) => {
     return allTodos.find((item) => item.id === id);
 }
 
-const deleteTodo = (id) => {
-    //filter
-    //save to json
+const deleteTodo = async (id) => {
+    const allTodos = await loadTodos();
+    const updatedTodos = allTodos.filter((item) => item.id !== id);
+    await saveTodos(updatedTodos);
 }
 
 const createTodo = async (text, priority, done) => {
@@ -45,7 +44,6 @@ const createTodo = async (text, priority, done) => {
 }
 
 const updateTodo = async (id, todo) => {
-    console.log(typeof todo.text);
     if (!isUpdateValid(todo)) {
         throw "this value is incorrect or not allowed to be set"
     }
@@ -58,7 +56,6 @@ const updateTodo = async (id, todo) => {
         }
     })
     await saveTodos(nextItem);
-    //save to json
 }
 
 module.exports = {
@@ -94,7 +91,7 @@ const assembleTodo = (text, priority, done) => {
 const isUpdateValid = (todo) => {
     let isValid = true;
     if (todo.id) isValid = false;
-    if (typeof todo.text !== 'string') isValid = false;
+    if (typeof todo.text !== "string") isValid = false;
     if (todo.priority < 1 || todo.priority > 5) isValid = false;
     if (typeof todo.done !== "boolean") isValid = false;
     return isValid;

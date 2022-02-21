@@ -4,7 +4,8 @@ const {
     loadTodos,
     createTodo,
     findTodo,
-    updateTodo
+    updateTodo,
+    deleteTodo
 } = require("../models/todos.model");
 
 const todosApi = Router();
@@ -29,8 +30,8 @@ todosApi.get('/:id', (req, res) => {
 
 todosApi.post('/', async (req, res) => {
     try {
-        const newTodo = await createTodo(req.body.text, req.body.priority, req.body.done);
-        res.json(newTodo);
+        await createTodo(req.body.text, req.body.priority, req.body.done);
+        res.status(200).end();
     } catch (err) {
         res.json({message: err});
     }
@@ -38,15 +39,16 @@ todosApi.post('/', async (req, res) => {
 
 todosApi.put('/:id', (req, res) => {
     try {
-        const updatedTodos = updateTodo(req.params.id, req.body);
-        res.json(updatedTodos);
+        updateTodo(req.params.id, req.body);
+        res.status(200).end();
     } catch (err) {
         res.json({message: err});
     }
 })
 
 todosApi.delete('/:id', (req, res) => {
-
+    deleteTodo(req.params.id);
+    res.status(200).end();
 })
 
 
