@@ -19,7 +19,13 @@
   },
   {
     "id": "84304014-af89-4bdb-827d-5d6d0cbbef86",
-    "text": "POST test text",
+    "text": "will be deleted soon",
+    "priority": 5,
+    "done": true
+  },
+  {
+    "id": "dea58e2d-e749-4e00-ba1c-eebc3df6ea75",
+    "text": "fun stuff",
     "priority": 5,
     "done": false
   }

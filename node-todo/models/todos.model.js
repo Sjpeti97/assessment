@@ -44,6 +44,7 @@ const createTodo = async (text, priority, done) => {
 }
 
 const updateTodo = async (id, todo) => {
+    let updatedTodo = {};
     if (!isUpdateValid(todo)) {
         throw "this value is incorrect or not allowed to be set"
     }
@@ -52,10 +53,12 @@ const updateTodo = async (id, todo) => {
         if (item.id !== id) {
             return item;
         } else {
-            return {...item, ...todo} //object spreading
+            updatedTodo = {...item, ...todo}
+            return updatedTodo; //object spreading
         }
     })
     await saveTodos(nextItem);
+    deleteDoneAfter5min(updatedTodo);
 }
 
 module.exports = {
@@ -96,3 +99,18 @@ const isUpdateValid = (todo) => {
     if (typeof todo.done !== "boolean") isValid = false;
     return isValid;
 }
+
+const deleteDoneAfter5min = (todo) => {
+    console.log("inside delete call");
+    console.log(todo)
+    if (todo.done === true) {
+        console.log("done is true");
+        setTimeout(() => {
+            console.log("inside set timeout");
+            if (findTodo(todo.id).done === true) deleteTodo(todo.id);
+            console.log("deleted")
+        }, 1000);
+        console.log("after timeout call");
+    }
+}
+
