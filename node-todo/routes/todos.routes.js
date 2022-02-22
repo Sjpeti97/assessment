@@ -1,3 +1,4 @@
+const Joi = require('joi');
 const {Router} = require('express');
 
 const {
@@ -30,16 +31,24 @@ todosApi.get('/:id', (req, res) => {
 
 todosApi.post('/', async (req, res) => {
     try {
-        await createTodo(req.body.text, req.body.priority, req.body.done);
-        res.status(200).end();
+        const todoSchema = {
+            text: Joi.string().required()
+        };
+        const result = Joi.valid(req.body, todoSchema);
+        if (result.error) {
+            res.status(400).send(result.error).end();
+        } else {
+            await createTodo(req.body.text, req.body.priority, req.body.done);
+            res.status(200).end();
+        }
     } catch (err) {
         res.json({message: err});
     }
 })
 
-todosApi.put('/:id', (req, res) => {
+todosApi.put('/:id', async (req, res) => {
     try {
-        updateTodo(req.params.id, req.body);
+        await updateTodo(req.params.id, req.body);
         res.status(200).end();
     } catch (err) {
         res.json({message: err});
@@ -51,6 +60,4 @@ todosApi.delete('/:id', (req, res) => {
     res.status(200).end();
 })
 
-
 module.exports = todosApi;
-

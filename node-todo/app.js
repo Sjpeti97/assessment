@@ -14,5 +14,3 @@ app.use(express.json());//req.body contains the http body
 app.use('/todos',todosApi);
 
 app.listen(port);
-
-
