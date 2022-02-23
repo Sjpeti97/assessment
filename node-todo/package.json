@@ -4,7 +4,9 @@
   "description": "## Instructions",
   "main": "app.js",
   "scripts": {
-    "start": "nodemon app.js"
+    "start": "nodemon --ignore todos.json server.js",
+    "test": "jest",
+    "prettier": "prettier --write ."
   },
   "author": "",
   "license": "ISC",
@@ -13,5 +15,15 @@
     "joi": "^17.6.0",
     "nodemon": "^2.0.15",
     "uuid": "^8.3.2"
+  },
+  "devDependencies": {
+    "jest": "^27.5.1",
+    "prettier": "^2.5.1",
+    "supertest": "^6.2.2"
+  },
+  "jest": {
+    "setupFilesAfterEnv": [
+      "./setup.test.js"
+    ]
   }
 }
