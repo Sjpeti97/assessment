@@ -31,12 +31,14 @@ todosApi.get('/:id', (req, res) => {
 
 todosApi.post('/', async (req, res) => {
     try {
-        const todoSchema = {
-            text: Joi.string().required()
-        };
-        const result = Joi.valid(req.body, todoSchema);
-        if (result.error) {
-            res.status(400).send(result.error).end();
+        const todoSchema = Joi.object().keys({
+            text: Joi.string().required(),
+            priority: Joi.number().min(1).max(5),
+            done: Joi.bool()
+        });
+        const {error, value} = todoSchema.validate(req.body);
+        if (error) {
+            res.status(400).send(error).end();
         } else {
             await createTodo(req.body.text, req.body.priority, req.body.done);
             res.status(200).end();
