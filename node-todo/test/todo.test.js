@@ -78,3 +78,23 @@ describe("test update/id route", () => {
             });
     });
 });
+
+describe("test delete/id route", () => {
+    let deleteMe;
+    beforeAll(async () => {
+        deleteMe = await createTodo("delete");
+    });
+    test("Should respond wit 200", () => {
+        return request(app)
+            .delete(`/todos/${deleteMe.id}`)
+            .then((response) => {
+                expect(response.statusCode).toBe(200);
+            })
+            .then(() => {
+                return findTodo(deleteMe.id);
+            })
+            .then((todo) => {
+                expect(todo).toBeUndefined();
+            });
+    });
+});
