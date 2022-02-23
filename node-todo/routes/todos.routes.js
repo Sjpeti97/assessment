@@ -1,56 +1,84 @@
-const {Router} = require('express');
+const Joi = require("joi");
+const { Router } = require("express");
 
 const {
     loadTodos,
     createTodo,
     findTodo,
     updateTodo,
-    deleteTodo
+    deleteTodo,
 } = require("../models/todos.model");
+
+const createTodoSchema = Joi.object().keys({
+    text: Joi.string().required(),
+    priority: Joi.number().min(1).max(5).default(3),
+    done: Joi.bool().default(false),
+});
+
+const updateTodoSchema = Joi.object().keys({
+    text: Joi.string(),
+    priority: Joi.number().min(1).max(5),
+    done: Joi.bool(),
+});
 
 const todosApi = Router();
 
-todosApi.use('/:id', async (req, res, next) => {
+todosApi.use("/:id", async (req, res, next) => {
     const todo = await findTodo(req.params.id);
     if (todo) {
         req.todo = todo;
         return next();
     }
     res.status(404).end();
-})
+});
 
-todosApi.get('/', async (req, res) => {
+todosApi.get("/", async (req, res) => {
     const todos = await loadTodos();
     res.json(todos);
-})
+});
 
-todosApi.get('/:id', (req, res) => {
+todosApi.get("/:id", (req, res) => {
     res.json(req.todo);
-})
+});
 
-todosApi.post('/', async (req, res) => {
+todosApi.post("/", async (req, res, next) => {
     try {
-        await createTodo(req.body.text, req.body.priority, req.body.done);
+        const { error, value } = createTodoSchema.validate(req.body);
+        if (error) {
+            res.status(400).json(error);
+        } else {
+            const newTodo = await createTodo(
+                value.text,
+                value.priority,
+                value.done
+            );
+            res.json(newTodo);
+        }
+    } catch (err) {
+        next(err);
+    }
+});
+
+todosApi.put("/:id", async (req, res, next) => {
+    try {
+        const { error, value } = updateTodoSchema.validate(req.body);
+        if (error) {
+            return res.status(400).json(error);
+        }
+        const updatedTodo = await updateTodo(req.params.id, value);
+        res.json(updatedTodo);
+    } catch (err) {
+        next(err);
+    }
+});
+
+todosApi.delete("/:id", async (req, res, next) => {
+    try {
+        await deleteTodo(req.params.id);
         res.status(200).end();
     } catch (err) {
-        res.json({message: err});
+        next(err);
     }
-})
-
-todosApi.put('/:id', (req, res) => {
-    try {
-        updateTodo(req.params.id, req.body);
-        res.status(200).end();
-    } catch (err) {
-        res.json({message: err});
-    }
-})
-
-todosApi.delete('/:id', (req, res) => {
-    deleteTodo(req.params.id);
-    res.status(200).end();
-})
-
+});
 
 module.exports = todosApi;
-
