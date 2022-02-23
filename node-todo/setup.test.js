@@ -1,8 +1,8 @@
-const fs = require('fs/promises');
-const path = require('path');
-const {setFilePath, setDeleteDelayMs} = require("./models/todos.model");
+const fs = require("fs/promises");
+const path = require("path");
+const { setFilePath, setDeleteDelayMs } = require("./models/todos.model");
 
-const testFile = path.join(__dirname, 'todos.test.json');
+const testFile = path.join(__dirname, "todos.test.json");
 
 beforeAll(() => {
     setFilePath(testFile);
@@ -11,4 +11,4 @@ beforeAll(() => {
 
 afterAll(() => {
     return fs.unlink(testFile);
-})
+});

@@ -2,18 +2,18 @@
 
 ## Instructions
 
-- Fork this project.
-- Write tests.
-- Commit the important milestones and not just the final result.
+-   Fork this project.
+-   Write tests.
+-   Commit the important milestones and not just the final result.
 
 ## Exercise description
 
 Create a RESTful API that provides access to a collection called "todos" that contains just the following fields:
 
-- `id`: String. Unique identifier of the todo (can't be set)
-- `text`: String. Can only contain english letters. (must be set)
-- `priority`: Number. Integer in the range from 1 to 5. (default value is 3)
-- `done`: Boolean. (default value is false)
+-   `id`: String. Unique identifier of the todo (can't be set)
+-   `text`: String. Can only contain english letters. (must be set)
+-   `priority`: Number. Integer in the range from 1 to 5. (default value is 3)
+-   `done`: Boolean. (default value is false)
 
 The API must accept JSON request body, and must provide JSON response body.
 
